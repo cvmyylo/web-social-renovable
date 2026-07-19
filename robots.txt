@@ -1,0 +1,12 @@
+# robots.txt para Social Renovable Latam
+# Proporciona instrucciones a los rastreadores de motores de búsqueda
+
+User-agent: *
+Allow: /
+
+# Evitar rastreo de archivos del sistema o temporales si existieran
+Disallow: /drafts/
+Disallow: /temp/
+
+# Enlace al sitemap de la web
+Sitemap: https://socialrenovable.cl/sitemap.xml
