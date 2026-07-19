@@ -7,7 +7,7 @@ const CONFIG = {
   urlMasSustentable: "https://massustentable.cl",
 
   // Correo de contacto y envío de formulario
-  emailContacto: "dres.16k@gmail.com",
+  emailContacto: "czegers@socialrenovable.cl",
 
   // Teléfono de contacto
   telefonoContacto: "+56 9 7708 5377",
