@@ -30,7 +30,9 @@ const CONFIG = {
     "logo-primser.png",
     "luval-valvoline-chile-lubricante-logo-top-ok.png",
     "ripley.png",
-    "solo-logo-alta-954x1024.png"
+    "solo-logo-alta-954x1024.png",
+    "corfo.png",
+    "sofofa_hub.png"
   ]
 };
 
