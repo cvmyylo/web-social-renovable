@@ -171,15 +171,12 @@ function generateCaptcha() {
   const inputEl = document.getElementById("form-captcha");
   if (!questionEl || !inputEl) return;
 
-  // Evitamos caracteres ambiguos como l, 1, O, 0 para mejorar la experiencia de usuario
-  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-  let result = "";
-  for (let i = 0; i < 5; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  expectedCaptchaResult = result;
+  // Generamos una suma simple para el CAPTCHA matemático
+  const num1 = Math.floor(Math.random() * 9) + 1; // 1 a 9
+  const num2 = Math.floor(Math.random() * 9) + 1; // 1 a 9
+  expectedCaptchaResult = num1 + num2;
 
-  questionEl.textContent = result;
+  questionEl.textContent = `¿Cuánto es ${num1} + ${num2}?`;
   inputEl.value = ""; // Limpiar respuesta anterior
 }
 
@@ -225,9 +222,10 @@ function initContactForm() {
       return;
     }
 
-    // 4. Validar resultado del CAPTCHA tradicional (insensible a mayúsculas/minúsculas)
-    if (userCaptcha.toLowerCase() !== expectedCaptchaResult.toLowerCase()) {
-      showMessage("El texto de seguridad es incorrecto. Inténtalo de nuevo.", "error");
+    // 4. Validar resultado del CAPTCHA matemático
+    const answer = parseInt(userCaptcha, 10);
+    if (isNaN(answer) || answer !== expectedCaptchaResult) {
+      showMessage("El resultado de seguridad es incorrecto. Inténtalo de nuevo.", "error");
       generateCaptcha();
       return;
     }
