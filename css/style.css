@@ -10,7 +10,7 @@
   --color-texto-cuerpo: #3A3A36;
   --color-texto-sobre-verde-titulo: #FFFFFF;
   --color-texto-sobre-verde-cuerpo: #C9D5CC;
-  --color-texto-sobre-verde-nota: #8FA596;
+  --color-texto-sobre-verde-nota: #A8BCB0;
   --color-bordes-tarjeta: #E8E5DE;
 
   --font-titulos: 'Fraunces', serif;
@@ -120,7 +120,8 @@ section {
 
 .btn-primario {
   background-color: var(--color-dorado-btn);
-  color: #FFFFFF;
+  color: var(--color-verde-oscuro);
+  font-weight: 600;
 }
 
 .btn-primario:hover {
@@ -995,7 +996,7 @@ select.form-input option {
 }
 
 .copyright-en {
-  opacity: 0.7;
+  color: #8FA596;
   font-size: 0.85em;
   margin-top: 4px;
 }

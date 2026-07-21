@@ -94,6 +94,8 @@ function renderClientLogos() {
         .replace(/\d+x\d+/g, "");
       imgEl.alt = `Logo ${formattedAlt.trim()}`;
       imgEl.loading = "lazy";
+      imgEl.width = 140;
+      imgEl.height = 70;
 
       itemDiv.appendChild(imgEl);
       container.appendChild(itemDiv);
