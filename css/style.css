@@ -119,8 +119,7 @@ section {
 
 .btn-primario {
   background-color: var(--color-dorado-btn);
-  color: var(--color-verde-oscuro);
-  font-weight: 600;
+  color: #FFFFFF;
 }
 
 .btn-primario:hover {
