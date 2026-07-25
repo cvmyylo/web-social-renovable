@@ -364,10 +364,14 @@ section {
   flex-shrink: 0;
   animation: marquee 35s linear infinite;
   padding-right: 60px;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
-.trust-logos-wrapper:hover .trust-logos {
-  animation-play-state: paused;
+@media (hover: hover) {
+  .trust-logos-wrapper:hover .trust-logos {
+    animation-play-state: paused;
+  }
 }
 
 .trust-logo-item {
