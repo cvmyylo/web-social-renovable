@@ -110,17 +110,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderResultadoValido(data) {
-    if (resFolio) resFolio.textContent = data.folio || input.value;
-    if (resOrganizacion) resOrganizacion.textContent = data.organizacion || "No especificada";
-    if (resFecha) resFecha.textContent = formatearFecha(data.fecha);
-    if (resRubro) resRubro.textContent = data.rubro || "No indicado";
+    if (resFolio) resFolio.textContent = data.folio || data.codigo || input.value;
+    if (resOrganizacion) resOrganizacion.textContent = data.organizacion || data.empresa || data.nombreEmpresa || "No especificada";
+    if (resFecha) resFecha.textContent = formatearFecha(data.fecha || data.createdAt || data.fechaEmision);
+    if (resRubro) resRubro.textContent = data.rubro || data.sector || "No indicado";
     if (resPais) resPais.textContent = data.pais || "Chile";
 
-    if (data.resumen) {
-      if (resAcciones) resAcciones.textContent = data.resumen.accionesMarcadas ?? 0;
-      if (resPriorizadas) resPriorizadas.textContent = data.resumen.priorizadas ?? 0;
+    const resumenObj = data.resumen || data.evaluacion || data;
+    if (resumenObj) {
+      if (resAcciones) resAcciones.textContent = resumenObj.accionesMarcadas ?? resumenObj.acciones ?? 0;
+      if (resPriorizadas) resPriorizadas.textContent = resumenObj.priorizadas ?? resumenObj.accionesPriorizadas ?? 0;
       if (resPrimerPaso) {
-        const esPrimerPaso = Boolean(data.resumen.primerPaso);
+        const esPrimerPaso = Boolean(resumenObj.primerPaso ?? resumenObj.primerPasoCompletado);
         resPrimerPaso.textContent = esPrimerPaso ? "✓ Completado" : "En proceso";
         resPrimerPaso.className = esPrimerPaso ? "badge-status badge-success" : "badge-status badge-neutral";
       }
