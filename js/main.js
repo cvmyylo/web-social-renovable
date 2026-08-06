@@ -16,7 +16,7 @@ const CONFIG = {
   googleAnalyticsId: "G-XXXXXXXXXX",
 
   // Endpoint base de la API Vercel para verificación de folios ISO 59004
-  apiVerificaUrl: "https://TU-APP-NEXTJS.vercel.app/api/verifica",
+  apiVerificaUrl: "https://mvca-sr.vercel.app/api/verifica",
 
   clientLogos: [
     "Comaco-Nuevo-1024x287.png",

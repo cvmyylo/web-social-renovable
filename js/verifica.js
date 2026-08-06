@@ -88,11 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("Respuesta sin cuerpo JSON válido:", errJson);
       }
 
-      if (response.ok && data.valido) {
+      const esValido = Boolean(data.valido === true || (data.existe === true && data.valido !== false));
+      const esInvalido = Boolean(data.valido === false || data.existe === false || response.status === 404);
+
+      if (response.ok && esValido) {
         // HTTP 200 - Informe Válido y Encontrado
         renderResultadoValido(data);
-      } else if (response.status === 404 || (data && data.valido === false)) {
-        // HTTP 404 o valido: false
+      } else if (esInvalido) {
+        // HTTP 404, valido: false o existe: false
         renderResultadoInvalido(folio, data.error || "Folio no encontrado en los registros oficiales.");
       } else {
         // Otro código HTTP o respuesta inesperada
