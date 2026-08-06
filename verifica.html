@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Folio ISO 59004 · Social Renovable Latam</title>
+  <meta name="description"
+    content="Verifica la validez y autenticidad de los informes de autodiagnóstico de sostenibilidad y economía circular bajo la norma ISO 59004 emitidos por Social Renovable Latam.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://socialrenovable.cl/verifica.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://socialrenovable.cl/verifica.html">
+  <meta property="og:title" content="Verificación de Folio ISO 59004 · Social Renovable Latam">
+  <meta property="og:description"
+    content="Plataforma de verificación oficial de autenticidad para informes de economía circular bajo estándar ISO 59004.">
+  <meta property="og:image" content="https://socialrenovable.cl/img/logos/LOGO-SOCIAL-RENOVABLE_alta.png">
+
+  <link rel="icon" type="image/png" href="img/logos/LOGO-SOCIAL-RENOVABLE_alta.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="js/main.js" defer></script>
+  <script src="js/verifica.js" defer></script>
+</head>
+
+<body>
+
+  <!-- navbar -->
+  <nav class="navbar">
+    <div class="wrap">
+      <a href="index.html" class="nav-logo" aria-label="Social Renovable Latam Inicio">
+        <img src="img/logos/LOGO-SOCIAL-RENOVABLE_alta.png" alt="Social Renovable Latam Logo" width="200" height="52"
+          fetchpriority="high">
+      </a>
+
+      <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html#redes">Redes</a></li>
+        <li class="nav-item"><a href="index.html#servicios">Servicios</a></li>
+        <li class="nav-item"><a href="index.html#respaldo">Respaldo</a></li>
+        <li class="nav-item"><a href="index.html#nosotros">Nosotros</a></li>
+        <li class="nav-item"><a href="verifica.html" class="link-secundario" style="font-weight: 600; color: var(--color-dorado-texto);">Verificar Folio</a></li>
+        <li><a href="index.html#contacto" class="btn btn-primario">Diagnostica tu sostenibilidad</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <header class="verifica-hero">
+    <div class="wrap">
+      <span class="eyebrow">Norma ISO 59004 · Economía Circular</span>
+      <h1>Verificación Oficial de Informe</h1>
+      <p>
+        Consulta la autenticidad y validez pública de los informes de autodiagnóstico emitidos por Social Renovable Latam mediante el código de Folio único.
+      </p>
+    </div>
+  </header>
+
+  <main class="verifica-main">
+    <div class="wrap verifica-container">
+
+      <!-- Formulario de Consulta -->
+      <section class="verifica-search-card">
+        <form id="verifica-form" class="verifica-form">
+          <label for="folio-input" style="font-size: 14px; font-weight: 600; color: var(--color-verde-noche);">
+            Ingresa el código de Folio del Informe:
+          </label>
+          <div class="verifica-input-group">
+            <input type="text" id="folio-input" class="verifica-input" placeholder="Ej: ISO59004-2026-ABCD"
+              required autocomplete="off" spellcheck="false" aria-label="Código de Folio ISO 59004">
+            <button type="submit" id="verify-btn" class="btn btn-primario verifica-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Verificar Informe</span>
+            </button>
+          </div>
+          <p class="verifica-hint">
+            <span>Ejemplo de formato:</span> <code>ISO59004-2026-ABCD</code>
+          </p>
+        </form>
+      </section>
+
+      <!-- Estado de Carga / Spinner -->
+      <div id="verifica-loading" class="verifica-loading" style="display: none;" aria-live="polite">
+        <div class="loading-spinner" role="status"></div>
+        <p class="loading-text">Consultando base de datos oficial de autodiagnósticos...</p>
+      </div>
+
+      <!-- Tarjeta 1: Resultado Válido y Encontrado -->
+      <article id="result-valid" class="result-card result-card-valid" style="display: none;" aria-live="polite">
+        <header class="result-card-header">
+          <div class="badge-verified">
+            <svg viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <span>Informe Auténtico y Verificado</span>
+          </div>
+          <code id="res-folio" class="folio-tag">ISO59004-2026-ABCD</code>
+        </header>
+
+        <div class="result-card-body">
+          <div class="result-grid">
+            <div class="result-item">
+              <label>Organización / Empresa</label>
+              <span id="res-organizacion">-</span>
+            </div>
+
+            <div class="result-item">
+              <label>Fecha de Emisión</label>
+              <span id="res-fecha">-</span>
+            </div>
+
+            <div class="result-item">
+              <label>Rubro de Actividad</label>
+              <span id="res-rubro">-</span>
+            </div>
+
+            <div class="result-item">
+              <label>País</label>
+              <span id="res-pais">-</span>
+            </div>
+          </div>
+
+          <div class="result-divider"></div>
+
+          <h2 class="result-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Síntesis de Evaluación ISO 59004
+          </h2>
+
+          <div class="resumen-grid">
+            <div class="resumen-box">
+              <span id="res-acciones" class="resumen-number">0</span>
+              <span class="resumen-label">Acciones Evaluadas</span>
+            </div>
+
+            <div class="resumen-box">
+              <span id="res-priorizadas" class="resumen-number">0</span>
+              <span class="resumen-label">Acciones Priorizadas</span>
+            </div>
+
+            <div class="resumen-box">
+              <span class="resumen-label" style="margin-bottom: 4px;">Primer Paso de Transición</span>
+              <span id="res-primer-paso" class="badge-status badge-success">✓ Completado</span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="result-card-footer">
+          <div class="result-stamp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Verificación Oficial Social Renovable</span>
+          </div>
+          <span>Estándar Internacional ISO 59004</span>
+        </footer>
+      </article>
+
+      <!-- Tarjeta 2: Resultado Inválido / No Encontrado -->
+      <article id="result-invalid" class="result-card result-card-invalid" style="display: none;" aria-live="polite">
+        <header class="result-card-header">
+          <div class="badge-invalid">
+            <span>✕ Folio no registrado o no válido</span>
+          </div>
+        </header>
+
+        <div class="invalid-body">
+          <div class="invalid-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </div>
+          <h3>Informe No Encontrado</h3>
+          <p>
+            El código de folio "<strong id="err-folio-buscado"></strong>" no se encuentra registrado en nuestra base de datos oficial.
+            <br>
+            <span id="err-message" style="color: #6B7280; font-size: 14px; display: block; margin-top: 8px;">Por favor verifica que no existan errores de tipeo e intenta nuevamente.</span>
+          </p>
+          <div class="invalid-actions">
+            <a href="index.html#contacto" class="btn btn-secundario" style="font-size: 14px; padding: 10px 20px;">Contactar a Soporte</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tarjeta 3: Error de Red / Conexión -->
+      <article id="result-error" class="result-card result-card-error" style="display: none;" aria-live="polite">
+        <div class="error-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h3 style="font-size: 18px; color: #B45309; margin-bottom: 8px;">Error de Conexión</h3>
+        <p style="font-size: 14px; color: var(--color-texto-cuerpo); margin-bottom: 0;">
+          No fue posible conectar con el servicio de verificación oficial. Por favor revisa tu conexión a internet o intenta nuevamente en unos momentos.
+        </p>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <img src="img/logos/LOGO-SOCIAL-RENOVABLE_alta.png" alt="Social Renovable Latam Logo Blanco" width="200"
+              height="52">
+          </a>
+          <p>Social Renovable Latam SpA · Sostenibilidad y economía circular · socialrenovable.cl</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyrights">
+          <p>&copy; 2026 Social Renovable Latam SpA. Todos los derechos reservados. La Serena, Región de Coquimbo, Chile
+            · socialrenovable.cl</p>
+          <p class="copyright-en">&copy; 2026 Social Renovable Latam SpA. All rights reserved.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#" class="link-sustentable" target="_blank" rel="noopener">+Sustentable</a>
+          <a href="https://www.linkedin.com/company/social-renovable/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="verifica.html">Verificación ISO 59004</a>
+          <a href="politica-de-privacidad.html">Política de Privacidad</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
