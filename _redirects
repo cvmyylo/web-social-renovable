@@ -1,3 +1,5 @@
 # Redirecciones 301 para Cloudflare Pages
+https://www.socialrenovable.cl/* https://socialrenovable.cl/:splat 301!
+http://www.socialrenovable.cl/* https://socialrenovable.cl/:splat 301!
 /experiencias/    https://socialrenovable.cl/    301
 /experiencias     https://socialrenovable.cl/    301
