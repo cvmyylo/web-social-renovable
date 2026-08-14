@@ -53,10 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function injectConfig() {
-  // Enlaces de +Sustentable
+  // Enlaces de +Sustentable (Validación segura de protocolo HTTP/HTTPS)
   const sustentableLinks = document.querySelectorAll(".link-sustentable");
+  const safeUrl = (CONFIG.urlMasSustentable && /^https?:\/\//i.test(CONFIG.urlMasSustentable))
+    ? CONFIG.urlMasSustentable
+    : "#";
+
   sustentableLinks.forEach(link => {
-    link.href = CONFIG.urlMasSustentable;
+    link.href = safeUrl;
   });
 
   // Correo de contacto
@@ -199,11 +203,13 @@ function initContactForm() {
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombre = document.getElementById("form-nombre").value.trim();
-    const empresa = document.getElementById("form-empresa").value.trim();
-    const email = document.getElementById("form-email").value.trim();
-    const userCaptcha = document.getElementById("form-captcha").value.trim();
-    const honeyField = contactForm.querySelector("input[name='_honey']").value.trim();
+    const nombre = (document.getElementById("form-nombre")?.value || "").trim();
+    const empresa = (document.getElementById("form-empresa")?.value || "").trim();
+    const email = (document.getElementById("form-email")?.value || "").trim();
+    const telefono = (document.getElementById("form-telefono")?.value || "").trim();
+    const mensaje = (document.getElementById("form-mensaje")?.value || "").trim();
+    const userCaptcha = (document.getElementById("form-captcha")?.value || "").trim();
+    const honeyField = (contactForm.querySelector("input[name='_honey']")?.value || "").trim();
     const submitBtn = contactForm.querySelector("button[type='submit']");
 
     // 1. Validar campos obligatorios
@@ -212,7 +218,20 @@ function initContactForm() {
       return;
     }
 
-    // 2. Honeypot check (detección silenciosa de bots)
+    // 2. Validar límites de longitud para evitar cargas maliciosas
+    if (nombre.length > 100 || empresa.length > 100 || email.length > 120 || telefono.length > 30 || mensaje.length > 3000) {
+      showMessage("Uno o más campos exceden el límite máximo de caracteres permitido.", "error");
+      return;
+    }
+
+    // 3. Validar formato de correo electrónico
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      showMessage("Por favor, ingresa un correo electrónico válido.", "error");
+      return;
+    }
+
+    // 4. Honeypot check (detección silenciosa de bots)
     if (honeyField) {
       console.warn("Spam detectado vía Honeypot.");
       showMessage("Consulta enviada con éxito.", "success"); // Simular éxito para desalentar al bot
@@ -221,7 +240,7 @@ function initContactForm() {
       return;
     }
 
-    // 3. Validación de tiempo de llenado mínimo (3 segundos)
+    // 5. Validación de tiempo de llenado mínimo (3 segundos)
     const submitTime = Date.now();
     if (submitTime - pageLoadTime < 3000) {
       console.warn("Spam detectado: Envío extremadamente rápido.");
@@ -229,7 +248,7 @@ function initContactForm() {
       return;
     }
 
-    // 4. Validar resultado del CAPTCHA matemático
+    // 6. Validar resultado del CAPTCHA matemático
     const answer = parseInt(userCaptcha, 10);
     if (isNaN(answer) || answer !== expectedCaptchaResult) {
       showMessage("El resultado de seguridad es incorrecto. Inténtalo de nuevo.", "error");
@@ -246,27 +265,41 @@ function initContactForm() {
     formData.append("_subject", `Nueva consulta web: ${nombre} - ${empresa}`);
     formData.append("_template", "table");
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${CONFIG.emailContacto}`, {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CONFIG.emailContacto)}`, {
         method: "POST",
         body: formData,
+        signal: controller.signal,
         headers: {
           "Accept": "application/json"
         }
       });
 
-      const result = await response.json();
+      let result = {};
+      try {
+        result = await response.json();
+      } catch (errJson) {
+        console.warn("Respuesta sin cuerpo JSON:", errJson);
+      }
 
-      if (response.status === 200 && result.success === "true") {
+      if (response.status === 200 && (result.success === "true" || result.success === true)) {
         showMessage("Recibido. Te respondemos dentro de dos días hábiles.", "success");
         contactForm.reset();
       } else {
         showMessage("Hubo un problema al enviar tu consulta. Por favor, inténtalo más tarde.", "error");
       }
     } catch (error) {
-      console.error("Error en envío:", error);
-      showMessage("Error de red. Verifica tu conexión e inténtalo nuevamente.", "error");
+      if (error.name === "AbortError") {
+        showMessage("Tiempo de espera agotado al conectar con el servidor. Inténtalo nuevamente.", "error");
+      } else {
+        console.error("Error en envío:", error);
+        showMessage("Error de red. Verifica tu conexión e inténtalo nuevamente.", "error");
+      }
     } finally {
+      clearTimeout(timeoutId);
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
       generateCaptcha();

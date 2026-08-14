@@ -51,14 +51,36 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /**
+   * Valida que el formato del folio sea alfanumérico seguro
+   * @param {string} folio
+   * @returns {boolean}
+   */
+  function esFormatoFolioValido(folio) {
+    // Permite alfanuméricos, guiones y guiones bajos entre 3 y 50 caracteres
+    const folioRegex = /^[a-zA-Z0-9\-_]{3,50}$/;
+    return folioRegex.test(folio);
+  }
+
+  /**
    * Ejecuta la consulta GET al endpoint de la API Vercel
    * @param {string} folio Código único del informe
    * @param {boolean} updateUrl True si debe actualizar la barra de direcciones
    */
   async function consultarFolioISO(folio, updateUrl) {
+    const cleanFolio = (folio || "").trim();
+
+    // Validación defensiva en cliente: formato y longitud
+    if (!cleanFolio || !esFormatoFolioValido(cleanFolio)) {
+      renderResultadoInvalido(
+        cleanFolio || "Vacío",
+        "El código de folio no tiene un formato válido (solo letras, números y guiones, entre 3 y 50 caracteres)."
+      );
+      return;
+    }
+
     // Actualizar URL limpia en el navegador sin recargar la página
     if (updateUrl) {
-      const newUrl = `${window.location.pathname}?folio=${encodeURIComponent(folio)}`;
+      const newUrl = `${window.location.pathname}?folio=${encodeURIComponent(cleanFolio)}`;
       window.history.replaceState(null, "", newUrl);
     }
 
@@ -69,13 +91,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Obtener la URL base desde CONFIG o usar la por defecto
     const baseUrl = (typeof CONFIG !== "undefined" && CONFIG.apiVerificaUrl)
       ? CONFIG.apiVerificaUrl
-      : "https://TU-APP-NEXTJS.vercel.app/api/verifica";
+      : "https://mvca-sr.vercel.app/api/verifica";
 
-    const endpoint = `${baseUrl.replace(/\/+$/, "")}/${encodeURIComponent(folio)}`;
+    const endpoint = `${baseUrl.replace(/\/+$/, "")}/${encodeURIComponent(cleanFolio)}`;
+
+    // Timeout de 10 segundos para prevenir conexiones colgadas
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
       const response = await fetch(endpoint, {
         method: "GET",
+        signal: controller.signal,
         headers: {
           "Accept": "application/json"
         }
@@ -96,15 +123,20 @@ document.addEventListener("DOMContentLoaded", () => {
         renderResultadoValido(data);
       } else if (esInvalido) {
         // HTTP 404, valido: false o existe: false
-        renderResultadoInvalido(folio, data.error || "Folio no encontrado en los registros oficiales.");
+        renderResultadoInvalido(cleanFolio, data.error || "Folio no encontrado en los registros oficiales.");
       } else {
         // Otro código HTTP o respuesta inesperada
-        renderResultadoInvalido(folio, data.error || `No se pudo verificar el folio (Código ${response.status}).`);
+        renderResultadoInvalido(cleanFolio, data.error || `No se pudo verificar el folio (Código ${response.status}).`);
       }
     } catch (error) {
-      console.error("Error de red o conexión:", error);
+      if (error.name === "AbortError") {
+        console.warn("Petición de verificación abortada por tiempo de espera.");
+      } else {
+        console.error("Error de red o conexión:", error);
+      }
       mostrarErrorRed();
     } finally {
+      clearTimeout(timeoutId);
       mostrarCargando(false);
     }
   }
